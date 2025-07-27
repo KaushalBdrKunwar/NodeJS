@@ -3,23 +3,20 @@ import express from "express";
 const app = express();
 const port = 5000;
 
-// app.use('/',(req,res)=>{
-
-// });
-
-app.get("/", (req, res) => {
-  console.log(req.query.c);
-  number = num(req.query.c);
-  square = number ** 2;
-  console.log(square);
-  return res.status(200).json({ message: "welcome to Backened" });
+app.use("/", (req, res, next) => {
+  const { c } = req.query;
+  if (Number.isNaN(Number(c))) {
+    res.status(400).json({ error: "'c' must be a valid number" });
+  } else {
+    next();
+  }
 });
 
-app.get("/about", (req, res) => {
-  return res.status(200).json({ message: "welcome to About page" });
+app.get("/", (req, res) => {
+  const { c } = req.query;
+  return res.status(200).json({ message: Number(c) * Number(c) });
 });
 
 app.listen(port, () => {
   console.log("server is running");
-  console.log("khai ta?");
 });
